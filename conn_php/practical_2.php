@@ -12,7 +12,7 @@ try {
 
     echo "Database connected successfully.<br><br>";
 
-    $create_table = "CREATE TABLE IF NOT EXISTS STUD (
+    $create_table = "CREATE TABLE STUD (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(50),
         city VARCHAR(50)
@@ -80,7 +80,7 @@ try {
     $stmt->execute();
 
     echo "Data updated successfully.<br><br>";
-    
+
 
     $delete_id = 1;
 
