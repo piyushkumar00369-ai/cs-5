@@ -1,7 +1,12 @@
 <?php
- include ("./conn.php");
- $update-query ="UPDATE Stud SET name"ravi"
- $stmt =$pdo -> prepare ($update-query);where id =2";
- $stmt ->excute ();
- ?>
- 
+
+include("./conn.php");
+
+$update_query = "UPDATE stud SET name = 'ravi' WHERE id = 2";
+
+$stmt = $conn->prepare($update_query);
+$stmt->execute();
+
+echo "Data updated successfully";
+
+?>
