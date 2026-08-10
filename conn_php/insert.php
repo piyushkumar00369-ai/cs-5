@@ -1,18 +1,21 @@
 <?php
-//pdo connection with database 
-$name ='xy2113';
-$city ='abc123';
 
-$insert_sql_query ="insert into stud(name ,city)values (!,!)"; //either question marks or placholder(!name)
-$stmt = $conn -> prepare ($insert_sql_query);
+// PDO connection with database
+include("./conn.php");
 
-$stmt ->bindparam(1,"$name"); //directly value is 
-$stmt ->bindparam(2,"$city"); //not allowed
+$name = 'xy2113';
+$city = 'abc123';
 
-$stud ->execute();
+$insert_sql_query = "INSERT INTO stud (name, city) VALUES (?, ?)";
 
-$stmt ->bindvalue(1,"monu365"); // variable is 
-$stmt ->bindvalue(2,"part467"); //not allowed
+$stmt = $conn->prepare($insert_sql_query);
 
-echo "data inserted";
+// bindParam() requires variables
+$stmt->bindParam(1, $name);
+$stmt->bindParam(2, $city);
+
+$stmt->execute();
+
+echo "Data inserted successfully";
+
 ?>
