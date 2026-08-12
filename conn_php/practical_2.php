@@ -1,5 +1,9 @@
 <?php
 
+// -----------------------------
+// PDO Database Connection
+// -----------------------------
+
 $dsn = "mysql:host=localhost;dbname=CS-5";
 $username = "root";
 $password = "";
@@ -12,7 +16,11 @@ try {
 
     echo "Database connected successfully.<br><br>";
 
-    $create_table = "CREATE TABLE STUD (
+    // -----------------------------
+    // CREATE TABLE
+    // -----------------------------
+
+    $create_table = "CREATE TABLE IF NOT EXISTS STUD (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(50),
         city VARCHAR(50)
@@ -22,6 +30,11 @@ try {
     $stmt->execute();
 
     echo "Table created successfully.<br><br>";
+
+
+    // -----------------------------
+    // INSERT DATA
+    // -----------------------------
 
     $name = "Rahul";
     $city = "Ahmedabad";
@@ -37,6 +50,10 @@ try {
 
     echo "Data inserted successfully.<br><br>";
 
+
+    // -----------------------------
+    // READ DATA
+    // -----------------------------
 
     $select = "SELECT * FROM STUD";
 
@@ -67,6 +84,11 @@ try {
 
     echo "</table><br>";
 
+
+    // -----------------------------
+    // UPDATE DATA
+    // -----------------------------
+
     $id = 2;
     $new_name = "Ravi";
 
@@ -81,6 +103,10 @@ try {
 
     echo "Data updated successfully.<br><br>";
 
+
+    // -----------------------------
+    // DELETE DATA
+    // -----------------------------
 
     $delete_id = 1;
 
