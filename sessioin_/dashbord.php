@@ -1,5 +1,11 @@
 <?php
 session_start();
 
-echo "Welcome " . $_SESSION['username'];
+if(!isset($_SESSION['username'])){
+	header("Location: login_secure.php?message=unauthorized");
+	exit();
+}
+
+header("Location: secure_dashboard.php");
+exit();
 ?>

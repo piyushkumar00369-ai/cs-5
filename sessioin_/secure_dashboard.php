@@ -3,9 +3,11 @@
 session_start();
 
 if(!isset($_SESSION['username'])){
-    header("Location: login_secure.php");
+    header("Location: login_secure.php?message=unauthorized");
     exit();
 }
+
+$message = $_GET['message'] ?? '';
 
 ?>
 
@@ -17,6 +19,10 @@ if(!isset($_SESSION['username'])){
 <body>
 
 <h2>Dashboard</h2>
+
+<?php if($message === 'success'): ?>
+    <p style="color: green;">Login successful!</p>
+<?php endif; ?>
 
 <p>Welcome <?php echo htmlspecialchars($_SESSION['username']); ?></p>
 
