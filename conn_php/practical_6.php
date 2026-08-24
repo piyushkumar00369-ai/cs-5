@@ -2,7 +2,7 @@
 $message = '';
 $username = '';
 $password = '';
-$login_type = $_POST['login_type'] ?? '';
+$login_type = '';
 
 try {
 	$conn = new PDO(
@@ -18,17 +18,15 @@ try {
 		user_password VARCHAR(100) NOT NULL
 	)");
 
-	$add_user = $conn->prepare(
-		'INSERT IGNORE INTO LOGIN_USERS (username, user_password) VALUES (:username, :user_password)'
-	);
-	$add_user->execute(array(
-		':username' => 'admin',
-		':user_password' => 'admin123'
-	));
+	$add_user = $conn->prepare('INSERT IGNORE INTO LOGIN_USERS (username, user_password) VALUES (:username, :user_password)');
+	$add_user->bindValue(':username', 'admin');
+	$add_user->bindValue(':user_password', 'admin123');
+	$add_user->execute();
 
-	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		$username = $_POST['username'] ?? '';
-		$password = $_POST['password'] ?? '';
+	if (isset($_POST['login_type'])) {
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$login_type = $_POST['login_type'];
 
 		if ($login_type === 'vulnerable') {
 			$sql = "SELECT * FROM LOGIN_USERS WHERE username = '$username' AND user_password = '$password'";
@@ -37,8 +35,8 @@ try {
 		} else {
 			$sql = 'SELECT * FROM LOGIN_USERS WHERE username = :username AND user_password = :user_password';
 			$statement = $conn->prepare($sql);
-			$statement->bindParam(':username', $username);
-			$statement->bindParam(':user_password', $password);
+			$statement->bindValue(':username', $username);
+			$statement->bindValue(':user_password', $password);
 			$statement->execute();
 			$user = $statement->fetch(PDO::FETCH_ASSOC);
 		}
@@ -49,11 +47,9 @@ try {
 			$message = 'Invalid username or password.';
 		}
 	}
-} catch (PDOException $error) {
+} catch (Exception $error) {
 	$message = 'Database error: ' . $error->getMessage();
 }
-
-$safe_message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html>
@@ -73,8 +69,8 @@ $safe_message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 		<button type="submit" name="login_type" value="secure">Secure Login</button>
 	</form>
 
-	<?php if ($message !== ''): ?>
-		<p><?= $safe_message ?></p>
+	<?php if ($message != ''): ?>
+		<p><?php echo htmlspecialchars($message); ?></p>
 	<?php endif; ?>
 
 	<p>Test account: admin / admin123</p>

@@ -2,38 +2,33 @@
 $name = '';
 $email = '';
 $age = '';
-$errors = array();
-$valid = false;
+$name_error = '';
+$email_error = '';
+$age_error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$name = trim($_POST['name'] ?? '');
-	$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '';
-	$age = filter_input(INPUT_POST, 'age', FILTER_VALIDATE_INT);
+if (isset($_POST['submit'])) {
+	$name = trim($_POST['name']);
+	$email = trim($_POST['email']);
+	$age = trim($_POST['age']);
 
 	if ($name === '') {
-		$errors['name'] = 'Name is required.';
-	} elseif (!preg_match("/^[A-Za-z .'-]+$/", $name)) {
-		$errors['name'] = 'Enter a valid name.';
+		$name_error = 'Name is required';
 	}
 
 	if ($email === '') {
-		$errors['email'] = 'Email is required.';
+		$email_error = 'Email is required';
 	} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		$errors['email'] = 'Enter a valid email address.';
+		$email_error = 'Enter a valid email';
 	}
 
-	if ($age === false || $age === null) {
-		$errors['age'] = 'Age is required and must be a number.';
+	if ($age === '') {
+		$age_error = 'Age is required';
+	} elseif (!is_numeric($age)) {
+		$age_error = 'Age must be a number';
 	} elseif ($age < 5 || $age > 100) {
-		$errors['age'] = 'Age must be between 5 and 100.';
+		$age_error = 'Age must be between 5 and 100';
 	}
-
-	$valid = count($errors) === 0;
 }
-
-$safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-$safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-$safeAge = htmlspecialchars((string) $age, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,34 +39,28 @@ $safeAge = htmlspecialchars((string) $age, ENT_QUOTES, 'UTF-8');
 	<h2>Student Information Form</h2>
 	<form method="post">
 		<label for="name">Name:</label>
-		<input type="text" name="name" id="name" value="<?= $safeName ?>"><br>
-		<?php if (isset($errors['name'])): ?>
-			<span><?= htmlspecialchars($errors['name'], ENT_QUOTES, 'UTF-8') ?></span><br>
-		<?php endif; ?>
+		<input type="text" name="name" id="name" value="<?php echo htmlspecialchars($name); ?>"><br>
+		<span><?php echo $name_error; ?></span><br>
 		<br>
 
 		<label for="email">Email:</label>
-		<input type="text" name="email" id="email" value="<?= $safeEmail ?>"><br>
-		<?php if (isset($errors['email'])): ?>
-			<span><?= htmlspecialchars($errors['email'], ENT_QUOTES, 'UTF-8') ?></span><br>
-		<?php endif; ?>
+		<input type="text" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>"><br>
+		<span><?php echo $email_error; ?></span><br>
 		<br>
 
 		<label for="age">Age:</label>
-		<input type="text" name="age" id="age" value="<?= $safeAge ?>"><br>
-		<?php if (isset($errors['age'])): ?>
-			<span><?= htmlspecialchars($errors['age'], ENT_QUOTES, 'UTF-8') ?></span><br>
-		<?php endif; ?>
+		<input type="text" name="age" id="age" value="<?php echo htmlspecialchars($age); ?>"><br>
+		<span><?php echo $age_error; ?></span><br>
 		<br>
 
-		<button type="submit">Submit</button>
+		<button type="submit" name="submit">Submit</button>
 	</form>
 
-	<?php if ($valid): ?>
+	<?php if ($name_error == '' && $email_error == '' && $age_error == '' && isset($_POST['submit'])): ?>
 		<h3>Submitted Information</h3>
-		<p>Name: <?= $safeName ?></p>
-		<p>Email: <?= $safeEmail ?></p>
-		<p>Age: <?= $safeAge ?></p>
+		<p>Name: <?php echo htmlspecialchars($name); ?></p>
+		<p>Email: <?php echo htmlspecialchars($email); ?></p>
+		<p>Age: <?php echo htmlspecialchars($age); ?></p>
 	<?php endif; ?>
 </body>
 </html>
