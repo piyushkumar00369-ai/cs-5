@@ -24,10 +24,10 @@ $safeFeedback = htmlspecialchars($feedback, ENT_QUOTES, 'UTF-8');
     <h2>Student Feedback Form</h2>
     <form method="post">
         <label>Student Name:</label>
-        <input type="text" name="name" id="name" required><br><br>
+        <input type="text" name="name" id="name" value="<?= $safeName ?>" required><br><br>
 
         <label>Feedback:</label>
-        <textarea name="feedback" rows="5" cols="40" required></textarea><br><br>
+        <textarea name="feedback" rows="5" cols="40" required><?= $safeFeedback ?></textarea><br><br>
 
         <button type="submit" value="Submit Feedback">Submit Feedback</button>
 </form>
@@ -36,8 +36,7 @@ $safeFeedback = htmlspecialchars($feedback, ENT_QUOTES, 'UTF-8');
         <h3>Submitted Feedback</h3>
         <p><b>Student:</b> <?= $safeName ?></p>
         <p><b>Feedback:</b> <?= nl2br($safeFeedback) ?></p>
-        <p>Special characters were encoded safely.</p>
-        <p><b>Encoded feedback:</b> <?= $safeFeedback ?></p>
+        <p>Special characters were encoded safely with <code>htmlspecialchars()</code>.</p>
 <?php endif; ?>
 </body>
 </html>
