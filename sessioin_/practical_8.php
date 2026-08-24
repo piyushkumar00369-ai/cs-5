@@ -2,7 +2,7 @@
 session_start();
 
 $error = '';
-$message = '';
+$message = ' welcome to the secure login system. Please login to continue.';
 
 // Logout
 if(isset($_GET['logout'])){
