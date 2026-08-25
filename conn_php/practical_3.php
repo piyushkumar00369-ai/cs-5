@@ -1,15 +1,8 @@
 <?php
 
-$dsn = "mysql:host=localhost;dbname=CS-5";
-$username = "root";
-$password = "";
+require_once __DIR__ . '/conn.php';
 
 try {
-
-    $conn = new PDO($dsn, $username, $password);
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     echo "Database connected successfully.<br><br>";
 
 
