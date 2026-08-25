@@ -1,44 +1,71 @@
 <?php
-$name = '';
-$feedback = '';
-$submitted = $_SERVER['REQUEST_METHOD'] === 'POST';
 
-if ($submitted) {
-    $name = trim($_POST['name'] ?? '');
-    $feedback = trim($_POST['feedback'] ?? '');
+$name = "";
+$feedback = "";
+$submitted = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $name = trim($_POST["name"] ?? "");
+    $feedback = trim($_POST["feedback"] ?? "");
+
+    $submitted = true;
+
+    // Convert special characters into safe HTML
+    $safeName = htmlspecialchars($name, ENT_QUOTES, "UTF-8");
+    $safeFeedback = htmlspecialchars($feedback, ENT_QUOTES, "UTF-8");
 }
 
-$safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-$safeFeedback = htmlspecialchars($feedback, ENT_QUOTES, 'UTF-8');
-
-// Direct output is unsafe because a user could submit HTML or JavaScript.
-// echo $name;
-// echo $feedback;
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student feedback</title>
+    <title>Student Feedback System</title>
 </head>
+
 <body>
-    <h2>Student Feedback Form</h2>
-    <form method="post">
-        <label>Student Name:</label>
-        <input type="text" name="name" id="name" value="<?= $safeName ?>" required><br><br>
 
-        <label>Feedback:</label>
-        <textarea name="feedback" rows="5" cols="40" required><?= $safeFeedback ?></textarea><br><br>
+<h2>Student Feedback System</h2>
 
-        <button type="submit" value="Submit Feedback">Submit Feedback</button>
+<form method="post">
+
+    Student Name:<br>
+    <input type="text" name="name" required>
+
+    <br><br>
+
+    Feedback:<br>
+    <textarea name="feedback" rows="5" cols="40" required></textarea>
+
+    <br><br>
+
+    <button type="submit">Submit Feedback</button>
+
 </form>
-<?php if ($submitted): ?>
-        <hr>
-        <h3>Submitted Feedback</h3>
-        <p><b>Student:</b> <?= $safeName ?></p>
-        <p><b>Feedback:</b> <?= nl2br($safeFeedback) ?></p>
-        <p>Special characters were encoded safely with <code>htmlspecialchars()</code>.</p>
-<?php endif; ?>
+
+<?php if ($submitted) { ?>
+
+    <hr>
+
+    <h3>Submitted Feedback</h3>
+
+    <p>
+        <b>Student Name:</b>
+        <?= $safeName ?>
+    </p>
+
+    <p>
+        <b>Feedback:</b><br>
+        <?= nl2br($safeFeedback) ?>
+    </p>
+
+    <p>
+        <b>Security:</b>
+        XSS input was safely encoded using htmlspecialchars().
+    </p>
+
+<?php } ?>
+
 </body>
 </html>
-
-    

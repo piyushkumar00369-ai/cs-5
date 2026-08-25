@@ -8,13 +8,17 @@ if(!isset($_SESSION['username'])){
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $feedback = $_POST['feedback'];
-    $rating = $_POST['rating'];
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $feedback = trim($_POST['feedback'] ?? '');
+    $rating = trim($_POST['rating'] ?? '');
 
     if($name != "" && $email != "" && $feedback != "" && $rating != ""){
-        echo "Thank you for your feedback, ".$name;
+        $safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $safeFeedback = htmlspecialchars($feedback, ENT_QUOTES, 'UTF-8');
+
+        echo "Thank you for your feedback, " . $safeName;
         echo "<br>";
         echo "<a href='secure_dashboard.php'>Back to Dashboard</a>";
     }
